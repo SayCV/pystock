@@ -8,7 +8,7 @@ import numpy as np
 import math
 import datetime
 import heapq
-
+import traceback
 
 ### 对每日指标数据，进行筛选。将符合条件的。二次筛选出来。
 def stat_all_lite(tmp_datetime):
@@ -46,8 +46,12 @@ def stat_all_lite(tmp_datetime):
         "wave_crest": data["trade"], "wave_base": data["trade"]}, index=data.index.values)
     print(stock_merge.head(1))
 
-    stock_merge = stock_merge.apply(apply_merge, axis=1)  # , axis=1)
-    del stock_merge["date"]  # 合并前删除 date 字段。
+    stock_merge = stock_merge.apply(apply_merge, axis=1, result_type='broadcast')  # , axis=1)
+    try:
+        del stock_merge["date"]  # 合并前删除 date 字段。
+    except  Exception as e:
+        print("error :", e)
+        traceback.print_exc()
     # 合并数据
     data_new = pd.merge(data, stock_merge, on=['code'], how='left')
 

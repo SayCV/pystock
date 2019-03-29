@@ -84,40 +84,45 @@ def insert_other_db(to_db, data, table_name, write_index, primary_keys):
 
 # 插入数据。
 def insert(sql, params=()):
-    with conn() as db:
+    try:
+        db = conn()
+        cur = db.cursor()
         print("insert sql:" + sql)
-        try:
-            db.execute(sql, params)
-        except  Exception as e:
-            print("error :", e)
+        
+        cur.execute(sql, params)
+    except  Exception as e:
+        print("error :", e)
 
 
 # 查询数据
 def select(sql, params=()):
-    with conn() as db:
+    try:
+        db = conn()
+        cur = db.cursor()
         print("select sql:" + sql)
-        try:
-            db.execute(sql, params)
-        except  Exception as e:
-            print("error :", e)
-        result = db.fetchall()
-        return result
+        cur.execute(sql, params)
+    except  Exception as e:
+        print("error :", e)
+    result = cur.fetchall()
+    return result
 
 
 # 计算数量
 def select_count(sql, params=()):
-    with conn() as db:
+    try:
+        db = conn()
+        cur = db.cursor()
         print("select sql:" + sql)
-        try:
-            db.execute(sql, params)
-        except  Exception as e:
+        
+        cur.execute(sql, params)
+    except  Exception as e:
             print("error :", e)
-        result = db.fetchall()
-        # 只有一个数组中的第一个数据
-        if len(result) == 1:
-            return int(result[0][0])
-        else:
-            return 0
+    result = cur.fetchall()
+    # 只有一个数组中的第一个数据
+    if len(result) == 1:
+        return int(result[0][0])
+    else:
+        return 0
 
 
 # 通用函数。获得日期参数。
