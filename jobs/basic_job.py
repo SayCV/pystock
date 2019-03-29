@@ -1,7 +1,6 @@
 #!/usr/local/bin/python3
 # -*- coding: utf-8 -*-
 
-
 import libs.common as common
 import sys
 import time
@@ -72,11 +71,12 @@ def stat_all(tmp_datetime):
 
 # 创建新数据库。
 def create_new_database():
-    with MySQLdb.connect(common.MYSQL_HOST, common.MYSQL_USER, common.MYSQL_PWD, "mysql", charset="utf8") as db:
+    db = MySQLdb.connect(common.MYSQL_HOST, common.MYSQL_USER, common.MYSQL_PWD, "mysql", charset="utf8")
+    with db.cursor() as cur:
         try:
             create_sql = " CREATE DATABASE IF NOT EXISTS %s CHARACTER SET utf8 COLLATE utf8_general_ci " % common.MYSQL_DB
             print(create_sql)
-            db.execute(create_sql)
+            cur.execute(create_sql)
         except Exception as e:
             print("error CREATE DATABASE :", e)
 
@@ -86,9 +86,9 @@ if __name__ == '__main__':
 
     # 检查，如果执行 select 1 失败，说明数据库不存在，然后创建一个新的数据库。
     try:
-        with MySQLdb.connect(common.MYSQL_HOST, common.MYSQL_USER, common.MYSQL_PWD, common.MYSQL_DB,
-                             charset="utf8") as db:
-            db.execute(" select 1 ")
+        db = MySQLdb.connect(common.MYSQL_HOST, common.MYSQL_USER, common.MYSQL_PWD, common.MYSQL_DB, charset="utf8")
+        cur = db.cursor()
+        cur.execute(" select 1 ")
     except Exception as e:
         print("check  MYSQL_DB error and create new one :", e)
         # 检查数据库失败，

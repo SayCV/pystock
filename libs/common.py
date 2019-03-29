@@ -22,10 +22,13 @@ MYSQL_USER = os.environ.get('MYSQL_USER') if (os.environ.get('MYSQL_USER') != No
 MYSQL_PWD = os.environ.get('MYSQL_PWD') if (os.environ.get('MYSQL_PWD') != None) else "mariadb"
 MYSQL_DB = os.environ.get('MYSQL_DB') if (os.environ.get('MYSQL_DB') != None) else "stock_data"
 
+DATA_ROOTDIR = os.environ.get('DATA_ROOTDIR') if (os.environ.get('DATA_ROOTDIR') != None) else "data"
+
 print("MYSQL_HOST :", MYSQL_HOST, ",MYSQL_USER :", MYSQL_USER, ",MYSQL_DB :", MYSQL_DB)
 MYSQL_CONN_URL = "mysql+mysqldb://" + MYSQL_USER + ":" + MYSQL_PWD + "@" + MYSQL_HOST + "/" + MYSQL_DB + "?charset=utf8"
 print("MYSQL_CONN_URL :", MYSQL_CONN_URL)
 
+print("DATA_ROOTDIR :", DATA_ROOTDIR)
 
 def engine():
     engine = create_engine(
@@ -161,7 +164,7 @@ def run_with_args(run_fun):
 
 
 # 设置基础目录，每次加载使用。
-bash_stock_tmp = "/data/cache/hist_data_cache/%s/%s/"
+bash_stock_tmp = DATA_ROOTDIR + "/data/cache/hist_data_cache/%s/%s/"
 if not os.path.exists(bash_stock_tmp):
     os.makedirs(bash_stock_tmp)  # 创建多个文件夹结构。
     print("######################### init tmp dir #########################")
